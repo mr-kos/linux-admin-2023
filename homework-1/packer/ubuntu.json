@@ -1,0 +1,104 @@
+{"builders": [
+    {
+      "boot_command": [
+	"<esc><wait><e><wait>",
+	"<down><down><down>",
+	"<down><down><down>",
+	"<down><down><down>",
+        "<end><wait>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+	"<tab>linux /casper/vmlinuz",
+	" quiet",
+	" autoinstall",
+        " auto url=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu_64_preseed.cfg ---<enter>",
+        "<tab>initrd /casper/initrd<enter>",
+        "<f10><wait>"
+	],
+      "boot_wait": "5s",
+      "disk_size": "10240",
+      "export_opts": [
+        "--manifest",
+        "--vsys",
+        "0",
+        "--description",
+        "{{user `artifact_description`}}",
+        "--version",
+        "{{user `artifact_version`}}"
+      ],
+      "guest_os_type": "ubuntu-64",
+      "http_directory": "http",
+      "iso_checksum": "sha256:d2fb80d9ce77511ed500bcc1f813e6f676d4a3577009dfebce24269ca23346a5",
+      "iso_url": "http://releases.ubuntu.com/23.10/ubuntu-23.10-live-server-amd64.iso",
+      "name": "{{user `image_name`}}",
+      "output_directory": "builds",
+      "shutdown_command": "sudo -S /sbin/halt -h -p",
+      "shutdown_timeout": "5m",
+      "ssh_password": "{{user `ssh_pass`}}",
+      "ssh_pty": true,
+      "ssh_port": 22,
+      "ssh_timeout": "2h",
+      "ssh_username": "vagrant",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "4096"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ],
+	["modifyvm",
+ 	"{{.Name}}",
+ 	"--nat-localhostreachable1", "on"
+	]
+      ],
+      "vm_name": "packer-ubuntu-server-vm"
+    }
+  ],
+  "post-processors": [
+    {
+      "compression_level": "7",
+      "output": "ubuntu-server-{{user `artifact_version`}}-kernel-6.6.6-x86_64-Minimal.box",
+      "type": "vagrant"
+    }
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo '{{user `ssh_pass`}}' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "expect_disconnect": true,
+      "override": {
+        "{{user `image_name`}}": {
+          "scripts": [
+            "scripts/stage-1-kernel-update.sh",
+            "scripts/stage-2-clean.sh"
+          ]
+        }
+      },
+      "pause_before": "20s",
+      "start_retry_timeout": "1m",
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "artifact_description": "Ubuntu Server 23.10 with kernel 6.6.6",
+    "artifact_version": "8",
+    "image_name": "ubuntu-server-23.10",
+    "ssh_pass": "vagrant"
+  }
+}

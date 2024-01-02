@@ -25,7 +25,7 @@
         "<tab>initrd /casper/initrd<enter>",
         "<f10><wait>"
 	],
-      "boot_wait": "5s",
+      "boot_wait": "10s",
       "disk_size": "10240",
       "export_opts": [
         "--manifest",
@@ -42,20 +42,18 @@
       "iso_url": "http://releases.ubuntu.com/23.10/ubuntu-23.10-live-server-amd64.iso",
       "name": "{{user `image_name`}}",
       "output_directory": "builds",
-      "shutdown_command": "sudo -S /sbin/halt -h -p",
-      "shutdown_timeout": "5m",
+      "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+      "ssh_username": "{{user `ssh_login`}}",
       "ssh_password": "{{user `ssh_pass`}}",
-      "ssh_pty": true,
       "ssh_port": 22,
-      "ssh_timeout": "2h",
-      "ssh_username": "vagrant",
+      "ssh_timeout": "1h",
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "4096"
+          "8192"
         ],
         [
           "modifyvm",
@@ -97,8 +95,9 @@
   ],
   "variables": {
     "artifact_description": "Ubuntu Server 23.10 with kernel 6.6.6",
-    "artifact_version": "8",
+    "artifact_version": "23",
     "image_name": "ubuntu-server-23.10",
+    "ssh_login": "vagrant",
     "ssh_pass": "vagrant"
   }
 }

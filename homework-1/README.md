@@ -12,18 +12,18 @@
 В образе нормально работают VirtualBox Shared Folders
 
 Выполнение:
-1) В качестве исходного vagrant-box использовал не CentOS, а Ubuntu 23.10.
+1) В качестве исходного vagrant-box использовал не CentOS, а Ubuntu 23.10.\n
 Для обновления ядра были загружены необходимые пакеты с сайта ubuntu.com (ссылки в скриптах packer'a)
 
 Изначальная версия ядра:
 
 vagrant@kernel-update:~$ uname -r
-6.5.0-14-generic
+\n6.5.0-14-generic
 
 Обновленная версия ядра:
 
 vagrant@kernel-update:~$ uname -r
-6.6.6-060606-generic
+\n6.6.6-060606-generic
 
 2) Box был собран без ошибок.
 

@@ -46,7 +46,8 @@
       "ssh_username": "{{user `ssh_login`}}",
       "ssh_password": "{{user `ssh_pass`}}",
       "ssh_port": 22,
-      "ssh_timeout": "1h",
+      "ssh_timeout": "10m",
+      "ssh_clear_authorized_keys": true,
       "type": "virtualbox-iso",
       "vboxmanage": [
         [
@@ -88,7 +89,7 @@
           ]
         }
       },
-      "pause_before": "20s",
+      "pause_before": "10s",
       "start_retry_timeout": "1m",
       "type": "shell"
     }

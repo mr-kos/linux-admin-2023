@@ -13,14 +13,18 @@
 
 Выполнение:
 1) В качестве исходного vagrant-box использовал не CentOS, а Ubuntu 23.10.
+Для обновления ядра были загружены необходимые пакеты с сайта ubuntu.com (ссылки в скриптах packer'a)
 
 Изначальная версия ядра:
 
 vagrant@kernel-update:~$ uname -r
 6.5.0-14-generic
 
-        "linux /casper/vmlinuz ",
-        "initrd=/casper/initrd ",
-        
-                "autoinstall ",
-        "ds=nocloud-net;s=http://{{.HTTPIP}}:{{.HTTPPort}}/ubuntu_64_preseed.cfg ",
+Обновленная версия ядра:
+
+vagrant@kernel-update:~$ uname -r
+6.6.6-060606-generic
+
+2) Box был собран без ошибок.
+
+3) Загрузил box на Vagrant Cloud.
